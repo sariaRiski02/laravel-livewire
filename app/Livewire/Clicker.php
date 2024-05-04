@@ -23,6 +23,7 @@ class Clicker extends Component
     public $Update_name = '';
     public $Update_email = '';
     public $Update_password = '';
+    public $search;
 
 
     public function submit()
@@ -56,8 +57,6 @@ class Clicker extends Component
         $this->reset();
         session()->flash('message', 'User Berhasil ditambahkan.');
     }
-
-
 
     public function createUser()
     {
@@ -98,14 +97,16 @@ class Clicker extends Component
     public function render()
     {
         // $title = "Clicker Livewire Component";
-        $users = User::Paginate(5);
+        $users = User::latest()
+            ->where('name', 'like', "%{$this->search}%")
+            ->orWhere('email', 'like', "%{$this->search}%")
+            ->Paginate(5);
+
         return view('livewire.clicker', compact('users'));
     }
 
-
-
     public function click()
     {
-        return dump('Thank you to clicked');
+        return dump('Thank you to have clicked');
     }
 }
